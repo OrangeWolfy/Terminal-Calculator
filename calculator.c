@@ -2,7 +2,7 @@
 #include<string.h>
 #include<ctype.h>
 
-// Terminal calculator with alias
+// Terminal calculator as alias
 // Execute this file and create an alias to work
 
 int calc(int n1, char *op, int n2)
@@ -39,11 +39,13 @@ int main(int argc, char* argv[]){
     char op, current;
     int sizeOperation, sign, i;
 
-    if(argc == 1){ // Check if when executed it was executed without any arguments
+    // Check if no arguments where given
+    if(argc == 1){
         printf("calc: missing operand\n");
         printf("Try 'calc --help' for more information\n");
     }
-    else if(strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "--h") == 0){ // Check if it was executed with the --help or --h arguments
+    // Check for help command
+    else if(strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "--h") == 0){
         printf("Usage: calc [OPERATION]\naddition, subtraction, multiplication and/or division.\n");
         printf("Solve the [OPERATION] given.\n");
         printf("\nCalculate the result of any operation given as long as it contains only\n");
@@ -51,15 +53,17 @@ int main(int argc, char* argv[]){
         printf("\t-numbers\n\t-addition simbol (+)\n\t-subtraction simbol (-)\n\t-multiplication simbol (*)/(x)\n\t-division simbol (/)\n");
         printf("\nFor more information: <https://github.com/OrangeWolfy/Terminal-Calculator>\n");
     }
-    else{ // Run
+    // Run main program
+    else{
         sizeOperation = strlen(argv[1]);
 
-        sign = argv[1][0] == '-' ? 1 : 0; // Check if the first element is '-' as in negative
+        // Check if the first number is negative
+        sign = argv[1][0] == '-' ? 1 : 0;
 
-        for(i = sign; i < sizeOperation; i++) // Get the first digit and operator
+        // Get the first digit and operator
+        for(i = sign; i < sizeOperation; i++)
         {
             current = argv[1][i];
-            // Check if the current argument is a number or if not save it as the operator
             if(isdigit(current)){
                 n1 += current - '0';
                 n1 *= 10;
@@ -69,15 +73,14 @@ int main(int argc, char* argv[]){
                 break;
             }
         }
-        // Remove last cero and turn it negative if necessary
         n1 /= 10;
         if(sign == 1)
             n1 *= -1;
 
-        while(i < sizeOperation){ // Loop in case there is more than one operation needed
-            for(; i < sizeOperation; i++) // Get the second digit
+        while(i < sizeOperation){
+            // Get the second digit
+            for(; i < sizeOperation; i++)
             {
-            // Check if the current argument is a number
                 current = argv[1][i];
                 if(isdigit(current)){
                     n2 += current - '0';
@@ -88,7 +91,9 @@ int main(int argc, char* argv[]){
             n2 /= 10;
             
             res = calc(n1, &op, n2);
-            if(op == '\0' || n2 == '\0'){ // Check for invalid or missing arguments
+            
+            // Check for invalid or missing arguments
+            if(op == '\0' || n2 == '\0'){
                 printf("Invalid operation\n");
                 return 0;
             }
