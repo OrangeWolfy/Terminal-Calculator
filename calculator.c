@@ -35,7 +35,7 @@ int calc(int n1, char *op, int n2)
 }
 
 int main(int argc, char* argv[]){
-    int n1 = 0, n2 = 0, res = 10;
+    int n1 = 0, n2 = 0, res = 0;
     char op, current;
     int sizeOperation, sign, i;
 
