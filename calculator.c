@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
         printf("\nCalculate the result of any operation given as long as it contains only\n");
         printf("The [OPERATION] given must only contain:\n");
         printf("\t-numbers\n\t-addition simbol (+)\n\t-subtraction simbol (-)\n\t-multiplication simbol (*)/(x)\n\t-division simbol (/)\n");
-        printf("\nFor more information: <https://github.com/OrangeWolfy>\n");
+        printf("\nFor more information: <https://github.com/OrangeWolfy/Terminal-Calculator>\n");
     }
     else{ // Run
         sizeOperation = strlen(argv[1]);
