@@ -88,12 +88,12 @@ int main(int argc, char* argv[]){
             n2 /= 10;
             
             res = calc(n1, &op, n2);
-            printf("%d %c %d = %d\n", n1, op, n2, res);
-
             if(op == '\0' || n2 == '\0'){ // Check for invalid or missing arguments
                 printf("Invalid operation\n");
                 return 0;
             }
+            
+            printf("%d %c %d = %d\n", n1, op, n2, res);
 
             // Apply the result to the first number in case of looping to keep count and get the next operator if it exists
             n1 = res;
