@@ -37,7 +37,7 @@ int calc(int n1, char *op, int n2)
 int main(int argc, char* argv[]){
     int n1, n2, res = 10;
     char op, current;
-    int size, sign, i;
+    int sizeOperation, sign, i;
 
     if(argc == 1){ // Check if when executed it was executed without any arguments
         printf("calc: missing operand\n");
