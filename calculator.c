@@ -7,26 +7,13 @@
 
 int calc(int n1, char *op, int n2)
 {
-    int res;
+    int res = 0;
     switch(*op){
-        case '+':
-            res = n1 + n2;
-            break;
-        case '-':
-            res = n1 - n2;
-            break;
-        case '*':
-        case 'x':
-            res = n1 * n2;
-            break;
-        case '/':
-            if(n2 != 0)
-                res = n1 / n2;
-            else{
-                printf("Cannot divide by 0\n");
-                *op = 0;
-            }
-            break;
+        case '+': return n1 + n2;
+        case '-': return n1 - n2;
+        case 'x': return n1 * n2;
+        case '*': return n1 * n2;
+        case '/': return n1 / n2;
         default:
             *op = '\0';
             break;
