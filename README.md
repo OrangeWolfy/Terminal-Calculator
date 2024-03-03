@@ -5,7 +5,7 @@ This is a calculator writen in C to use directly in the terminal as an alias wit
 
 ## Setup
 
-### Step 1: Installation
+### Step 1: Copy repository
 This project requieres the C language and the a C compiler (*GCC*) intalled.
 ```
 # install the requirements
@@ -14,21 +14,16 @@ sudo apt-get install build-essential
 
 # clone the repository and compile the source file to an executable
 git clone https://github.com/OrangeWolfy/Terminal-Calculator.git
-gcc calculator.c -o calc
-```
-I recommend you should move this project to a file close to the $HOME file to make the path short if you haven't already.
-```
-mkdir ~/.calculator
-cp calculator.c ~/.calculator
-cp calc ~/.calculator
 ```
 
-### Step 2: Configure the command/alias
-To use the executable as a command you will need to configure the `~/.bashrc` file as follows.
-```
-alias calc="~/.calculator/calc
-```
-The alias name can be change if needed by just changing the `alias NewName=`.
+### Step 2: Use the Makefile
+A Makefile was created with all the steps:
+- Create the directory to hold the executable only if it hasn't been created `mkdir -p ~/.calculator/`
+- Compile the C file `gcc calculator.c -o calc`
+- Move the executable to the directory created `mv calc ~/.calculator/`
+- Create the alias on `.bashrc` for use in all terminals only if it hasn't been created `grep -l calc=\"~/.calculator/calc\" ~/.bashrc || echo "alias calc=\"~/.calculator/calc\"" >> ~/.bashrc`
+
+To build use the make file just type `make` where you copied the repository.
 
 ### Step 3: Try it
 ```
