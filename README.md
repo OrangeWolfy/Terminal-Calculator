@@ -49,6 +49,3 @@ You can make as many operations as long as the result is within the int size (-2
 ### Multiple operations
 As said you can make multiple operations and it will keep record of your result and may be combined like expected in a calculator
 `calc 10+20-10*2/4` this will give 25 (*just remeber there is no order of operations*).
-
-## More
-I know not many people or none at all will see this but thank you if you are, this was a project I decided to do when I wanted to know the result to an operation so simple opening the calculator will be a waste of time and too lazy to solve it myself so I made this to solve that and just have some more practice making a new type of project experimenting with arguments when executed as a command and documenting a github project for the first time so feel free to modify it as much as you want.
