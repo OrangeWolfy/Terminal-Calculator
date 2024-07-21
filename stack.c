@@ -34,7 +34,7 @@ long double pop_longdouble(struct stack_longdouble **top) {
 	return num;
 }
 
-int free_double(struct stack_longdouble **top) {
+int free_stack_longdouble(struct stack_longdouble **top) {
 	struct stack_longdouble *temp;
 	while(*top != NULL) {
 		temp = (*top)->next;
@@ -79,7 +79,7 @@ char pop_char(struct stack_char **top) {
 	return op;
 }
 
-int free_char(struct stack_char **top) {
+int free_stack_char(struct stack_char **top) {
 	struct stack_char *temp;
 	while(*top != NULL) {
 		temp = (*top)->next;
