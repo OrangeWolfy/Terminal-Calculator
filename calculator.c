@@ -55,7 +55,7 @@ struct queue *infix_to_postfix(char arg[]) {
 			}
 			num = 0;
 
-			while(operator_stack != NULL && precedence > operator_precedence(operator_stack->op)) {
+			while(operator_stack != NULL && precedence <= operator_precedence(operator_stack->op)) {
 				char c = pop_char(&operator_stack);
 				if(enqueue(&output_queue, -1, c) == -1)	{
 					printf("Fail to enque output in line %d\n", __LINE__);
@@ -119,5 +119,14 @@ int main(int argc, char* argv[]){
 	if(output_queue == NULL) {
 		return -1;
 	}
+
+	while(output_queue != NULL) {
+		if(output_queue->val != -1)
+			printf("%.1Lf ", output_queue->val);
+		else printf("%c ", output_queue->op);
+		dequeue(&output_queue);
+	}
+	printf("\n");
+
     return 0;
 }
