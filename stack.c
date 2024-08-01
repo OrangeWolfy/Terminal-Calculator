@@ -1,4 +1,5 @@
 #include<stdlib.h>
+#include<limits.h>
 
 // Stack of numbers
 
@@ -25,7 +26,7 @@ int push_longdouble(struct stack_longdouble **top, long double num) {
 
 long double pop_longdouble(struct stack_longdouble **top) {
 	if(*top == NULL) {
-		return -1;
+		return INT_MIN;
 	}
 	struct stack_longdouble *temp = (*top)->next;
 	long double num = (*top)->val;

@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include <limits.h>
 #include"stack.c"
 #include"queue.c"
 
@@ -15,7 +16,8 @@ long double evaluate_postfix(struct queue **output_queue);
 int main(int argc, char* argv[]) {
 	// Check if no arguments were given
 	if(argc < 2) {
-		return -1;
+		printf("No argument given\n");
+		return 1;
 	}
 	// Print help menu if requested
 	if(strcmp(argv[1], "--h") == 0 || strcmp(argv[1], "--help") == 0) {
@@ -27,13 +29,19 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
+
 	struct queue *output_queue;
 	output_queue = infix_to_postfix(argv[1]);
 	if(output_queue == NULL) {
-		return -1;
+		return 1;
 	}
 
-	printf("%.3Lf\n", evaluate_postfix(&output_queue));
+	long double res = evaluate_postfix(&output_queue);
+	if(res == INT_MIN) {
+		printf("NULL\n");
+		return 1;
+	}
+	printf("%s = %.3Lf\n", argv[1], res);
 
     return 0;
 }
@@ -70,77 +78,77 @@ struct queue *infix_to_postfix(char arg[]) {
 	struct queue *output_queue = NULL;
 	struct stack_char *operator_stack = NULL;
 	long double num = 0;
-	int precedence, parentheses_flag = 0;
-
+	int precedence;
+	char c;
+	
 	// Loop until argument is empty or an error occurs
 	for(int i = 0; arg[i] != '\0'; i++) {
-		// Check if the current char is a number or open parentheses
-		if(((int)arg[i] >= 48 && (int)arg[i] <= 57) || arg[i] == '(') {
-			if(arg[i] != '(') {
+		if((int)arg[i] >= 48 && (int)arg[i] <= 57) {
+		// Grab the whole number in the operation
+			while((int)arg[i] >= 48 && (int)arg[i] <= 57) {
 				num += arg[i] - 48;
 				num *= 10;
-			} else {
-				push_char(&operator_stack, arg[i]);
+				i++;
 			}
-		// Check if the current char is valid
-		} else if ((precedence = operator_precedence(arg[i])) != -1) {
 			num /= 10;
 			if(enqueue(&output_queue, num, '\0') == -1) {
 				printf("Fail to enque output in line %d\n", __LINE__);
 				goto cleanup;
 			}
 			num = 0;
-
-			char c;
-			if(arg[i] != ')') {
-				// Empty operator stack while the current operator has lower or equal precedence to the top of the operator stack
-				while(operator_stack != NULL && precedence <= operator_precedence(operator_stack->op)) {
-					c = pop_char(&operator_stack);
-					if(c == '\0') {
-						printf("Operator stack empty in line %d\n", __LINE__);
-						goto cleanup;
-					}
-					if(enqueue(&output_queue, -1, c) == -1)	{
-						printf("Fail to enque output in line %d\n", __LINE__);
-						goto cleanup;
-					}
+			i--;
+		} else if(arg[i] == '(') {
+		// Push if open parentheses
+			if(push_char(&operator_stack, arg[i]) == -1) {
+				printf("Fail to push operator in line %d\n", __LINE__);
+				goto cleanup;
+			}
+		} else if(arg[i] == ')') {
+		// Empty operator stack until an open parentheses is found
+			while(operator_stack != NULL) {
+				c = pop_char(&operator_stack);
+				if(c == '(') {
+					break;
 				}
-			} else {
-				// Empty operator stack until open parentheses is found
-				while(operator_stack != NULL) {
-					c = pop_char(&operator_stack);
-					if(c == '(') {
-						break;
-					}
-					if(enqueue(&output_queue, -1, c) == -1)	{
-						printf("Fail to enque output in line %d\n", __LINE__);
-						goto cleanup;
-					}
-				}
-				if(c == '\0') {
-					printf("No open parentheses before closed parentheses in the operation\n");
+				if(enqueue(&output_queue, -1, c) == -1)	{
+					printf("Fail to enque output in line %d\n", __LINE__);
 					goto cleanup;
 				}
-				i++;
+			}
+			if(c != '(') {
+				printf("No open parentheses before closed parentheses in the operation\n");
+				goto cleanup;
+			}
+		} else {
+		// Check if the argument is a valid operator
+			precedence = operator_precedence(arg[i]);
+			if(precedence == -1) {
+				printf("%d\n", i);
+				printf("Invalid operator \'%c\'\n", arg[i]);
+				goto cleanup;
+			}
+			// Enqueue a 0 if the operation starts with an operator to evaluate postfix notation correctly
+			if(output_queue == NULL) {
+				if(enqueue(&output_queue, 0, '\0') == -1) {
+					printf("Fail to enque output in line %d\n", __LINE__);
+					goto cleanup;
+				}
+			}
+			// Empty operator stack while the current operator has lower or equal precedence to the top of the operator stack
+			while(operator_stack != NULL && precedence <= operator_precedence(operator_stack->op)) {
+				c = pop_char(&operator_stack);
+				if(enqueue(&output_queue, -1, c) == -1)	{
+					printf("Fail to enque output in line %d\n", __LINE__);
+					goto cleanup;
+				}
 			}
 			if(push_char(&operator_stack, arg[i]) == -1) {
 				printf("Fail to push operator in line %d\n", __LINE__);
 				goto cleanup;
 			}
-		} else {
-			printf("Invalid \'%c\' operator.\nType \'calc --help\' for more information\n", arg[i]);
-			goto cleanup;
 		}
 	}
-
-	num /= 10;
-	if(enqueue(&output_queue, num, '\0') == -1) {
-		printf("Fail to enque output in line %d\n", __LINE__);
-		goto cleanup;
-	}
-	num = 0;
-
-	// Empty operator stack to output queue
+	// Empty operator stack to the output queue
 	while(operator_stack != NULL) {
 		char op = pop_char(&operator_stack);
 		if(enqueue(&output_queue, -1, op) == -1) {
@@ -162,24 +170,27 @@ long double evaluate_postfix(struct queue **output_queue) {
 	struct stack_longdouble *solve_stack = NULL;
 	long double num1, num2;
 
+	if(output_queue == NULL) {
+		return INT_MIN;
+	}
 	// Loop until output queue is empty or an error occurs
 	while(*output_queue != NULL) {
-		// Push to the solved stack if it is a number
 		if((*output_queue)->op == '\0') {
+		// Push to the solved stack if it is a number
 			if (push_longdouble(&solve_stack, (*output_queue)->val) == -1) {
 				printf("Fail to push number in line %d\n", __LINE__);
 				goto cleanup;
 			}
 		} else {
-			// If the next queue is an operator, pop the first two numbers from the solved stack, evaluate below and push the result
+		// If current queue is an operator, pop the first two numbers from the solved stack, evaluate below and push the result
 			num2 = pop_longdouble(&solve_stack); 
-			if(num2 == -1) {
+			if(num2 == INT_MIN) {
 				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
 				goto cleanup;
 			}
 				
 			num1 = pop_longdouble(&solve_stack);
-			if(num1 == -1) {
+			if(num1 == INT_MIN) {
 				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
 				goto cleanup;
 			}
@@ -225,12 +236,15 @@ long double evaluate_postfix(struct queue **output_queue) {
 		dequeue(output_queue);
 		
 	}
+	if(solve_stack == NULL) {
+		goto cleanup;
+	}
 
 	return solve_stack->val;
 
 cleanup:
 	free_stack_longdouble(&solve_stack);
 	free_queue(output_queue);
-	return -1;
+	return INT_MIN;
 }
 

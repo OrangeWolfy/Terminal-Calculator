@@ -48,8 +48,8 @@ You can make as many operations as long as it only includes:
 * More may be added.
 
 ### Important notes
-* In some terminals the parenthesis may be reserved so `\(` and `\)` will be needed to work.
-* **Blank spaces** are not valid: `calc 1 + 1` will not result give a result.
+* In some terminals some characters may be reserved so type the backslash `\` to work.
+* **Blank spaces** are not valid: `calc 1 + 1` will not result give result the expected result.
 
 
 ### Multiple operations
