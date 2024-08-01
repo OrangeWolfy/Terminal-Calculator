@@ -3,13 +3,13 @@
 
 // Stack of numbers
 
-struct stack_longdouble {
-	long double val;
-	struct stack_longdouble *next;
+struct stack_double {
+	double val;
+	struct stack_double *next;
 };
 
-int push_longdouble(struct stack_longdouble **top, long double num) {
-	struct stack_longdouble *new_stack = malloc(sizeof(struct stack_longdouble ));
+int push_double(struct stack_double **top, double num) {
+	struct stack_double *new_stack = malloc(sizeof(struct stack_double ));
 	if(new_stack == NULL) {
 		return -1;
 	}
@@ -24,19 +24,19 @@ int push_longdouble(struct stack_longdouble **top, long double num) {
 	return 0;
 }
 
-long double pop_longdouble(struct stack_longdouble **top) {
+double pop_double(struct stack_double **top) {
 	if(*top == NULL) {
 		return INT_MIN;
 	}
-	struct stack_longdouble *temp = (*top)->next;
-	long double num = (*top)->val;
+	struct stack_double *temp = (*top)->next;
+	double num = (*top)->val;
 	free(*top);
 	*top = temp;
 	return num;
 }
 
-int free_stack_longdouble(struct stack_longdouble **top) {
-	struct stack_longdouble *temp;
+int free_stack_double(struct stack_double **top) {
+	struct stack_double *temp;
 	while(*top != NULL) {
 		temp = (*top)->next;
 		free(*top);

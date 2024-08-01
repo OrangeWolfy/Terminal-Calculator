@@ -11,7 +11,7 @@
 
 int operator_precedence(char arg);
 struct queue *infix_to_postfix(char arg[]);
-long double evaluate_postfix(struct queue **output_queue);
+double evaluate_postfix(struct queue **output_queue);
 
 int main(int argc, char* argv[]) {
 	// Check if no arguments were given
@@ -36,12 +36,12 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	long double res = evaluate_postfix(&output_queue);
+	double res = evaluate_postfix(&output_queue);
 	if(res == INT_MIN) {
 		printf("NULL\n");
 		return 1;
 	}
-	printf("%s = %.3Lf\n", argv[1], res);
+	printf("%s = %.1f\n", argv[1], res);
 
     return 0;
 }
@@ -77,7 +77,7 @@ int operator_precedence(char arg) {
 struct queue *infix_to_postfix(char arg[]) {
 	struct queue *output_queue = NULL;
 	struct stack_char *operator_stack = NULL;
-	long double num = 0;
+	double num = 0;
 	int precedence;
 	char c;
 	
@@ -166,9 +166,9 @@ cleanup:
 }
 
 // Evaluate the postfix operation in queue and return the final answer for the operation
-long double evaluate_postfix(struct queue **output_queue) {
-	struct stack_longdouble *solve_stack = NULL;
-	long double num1, num2;
+double evaluate_postfix(struct queue **output_queue) {
+	struct stack_double *solve_stack = NULL;
+	double num1, num2;
 
 	if(output_queue == NULL) {
 		return INT_MIN;
@@ -177,19 +177,19 @@ long double evaluate_postfix(struct queue **output_queue) {
 	while(*output_queue != NULL) {
 		if((*output_queue)->op == '\0') {
 		// Push to the solved stack if it is a number
-			if (push_longdouble(&solve_stack, (*output_queue)->val) == -1) {
+			if (push_double(&solve_stack, (*output_queue)->val) == -1) {
 				printf("Fail to push number in line %d\n", __LINE__);
 				goto cleanup;
 			}
 		} else {
 		// If current queue is an operator, pop the first two numbers from the solved stack, evaluate below and push the result
-			num2 = pop_longdouble(&solve_stack); 
+			num2 = pop_double(&solve_stack); 
 			if(num2 == INT_MIN) {
 				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
 				goto cleanup;
 			}
 				
-			num1 = pop_longdouble(&solve_stack);
+			num1 = pop_double(&solve_stack);
 			if(num1 == INT_MIN) {
 				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
 				goto cleanup;
@@ -197,32 +197,32 @@ long double evaluate_postfix(struct queue **output_queue) {
 
 			switch((*output_queue)->op) {
 				case '+':
-					if (push_longdouble(&solve_stack, num1 + num2) == -1) {
+					if (push_double(&solve_stack, num1 + num2) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
 					break;
 				case '-':
-					if (push_longdouble(&solve_stack, num1 - num2) == -1) {
+					if (push_double(&solve_stack, num1 - num2) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
 					break;
 				case '*':
 				case 'x':
-					if (push_longdouble(&solve_stack, num1 * num2) == -1) {
+					if (push_double(&solve_stack, num1 * num2) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
 					break;
 				case '/':
-					if (push_longdouble(&solve_stack, num1 / num2) == -1) {
+					if (push_double(&solve_stack, num1 / num2) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
 					break;
 				case '%':
-					if (push_longdouble(&solve_stack, (long double)((long long)num1 % (long long)num2)) == -1) {
+					if (push_double(&solve_stack, (double)((long long)num1 % (long long)num2)) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
@@ -243,7 +243,7 @@ long double evaluate_postfix(struct queue **output_queue) {
 	return solve_stack->val;
 
 cleanup:
-	free_stack_longdouble(&solve_stack);
+	free_stack_double(&solve_stack);
 	free_queue(output_queue);
 	return INT_MIN;
 }

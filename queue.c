@@ -1,12 +1,12 @@
 #include<stdlib.h>
 
 struct queue {
-	long double val;
+	double val;
 	char op;
 	struct queue *next;
 };
 
-int enqueue(struct queue **queue, long double num, char op) {
+int enqueue(struct queue **queue, double num, char op) {
 	struct queue *new_queue = malloc(sizeof(struct queue));
 	if(new_queue == NULL) {
 		return -1;
