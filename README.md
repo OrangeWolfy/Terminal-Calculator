@@ -15,7 +15,7 @@ git clone https://github.com/OrangeWolfy/Terminal-Calculator.git
 ```
 
 ### Step 2: Use the Makefile
-A Makefile was created with all the steps or build manually if desired:
+A Makefile was created with all the steps for a bash terminal or build manually if desired:
 - Create the directory to hold the executable `mkdir -p ~/.calculator/`.
 - Compile the C file `gcc calculator.c -o calc`.
 - Move the executable to the directory created `mv calc ~/.calculator/`.
@@ -44,6 +44,7 @@ You can make as many operations as long as it only includes:
 * Multiplication: `calc 2*2` or `calc 2x2` will result in 4.
 * Division: `calc 10/2` will result in 5.
 * Modulus: `calc 2%10` will result in 2.
+* Exponentiation: `calc 2^4` will result in 16.
 * Parenthesis: `calc (1+2)*3` will result in 9.
 * More may be added.
 
@@ -54,4 +55,4 @@ You can make as many operations as long as it only includes:
 
 ### Multiple operations
 As said you can make multiple operations and it will evaluate the operation as expected in a calculator for example:\
-`calc 10+20-30*40/50%60` will result in 6 and `calc (10+20-30)*40/50%60` will result in 0.
+`calc 10+20-30*40/50%60+2^4` will result in 22 and `calc (10+20-30)*40/50%60+2^4` will result in 16.
