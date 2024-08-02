@@ -59,6 +59,7 @@ int operator_precedence(char arg) {
 		case 'x':
 		case '/':
 		case '%':
+		case '^':
 			operator_val = 2;
 			break;
 		case '(':
@@ -223,6 +224,16 @@ double evaluate_postfix(struct queue **output_queue) {
 					break;
 				case '%':
 					if (push_double(&solve_stack, (double)((long long)num1 % (long long)num2)) == -1) {
+						printf("Fail to push number in line %d\n", __LINE__);
+						goto cleanup;
+					}
+					break;
+				case '^':
+					double pow = num1;
+					for(int i = 1; i < num2; i++) {
+						num1 *= pow;
+					}
+					if (push_double(&solve_stack, num1) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
