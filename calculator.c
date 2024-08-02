@@ -251,7 +251,8 @@ double evaluate_postfix(struct queue **output_queue) {
 		goto cleanup;
 	}
 
-	return solve_stack->val;
+	num1 = pop_double(&solve_stack);
+	return num1;
 
 cleanup:
 	free_stack_double(&solve_stack);
