@@ -1,10 +1,10 @@
 # Terminal Calculator
 
-Calculator written in C to use directly in the terminal as a command to evaluate operations that include additions, subtractions, multiplications, divisions, modulus and parenthesis with operand precedence of PMMDAS to solve operation without the need to open the calculator.
+Calculator written in C to use directly in the terminal as a command to evaluate operations that include additions, subtractions, multiplications, divisions, modulus and parenthesis with operand precedence of PEMDAS to solve operation without the need to open the calculator.
 </br><br>
 
 ## Requirements
-This project requieres the C language and the (*GCC*) C compiler pre-intalled.
+This project requieres the C language and the (*GCC*) C compiler pre-intalled.\
 *Check online the installation process for your current os*
 
 ## Installation and setup
@@ -33,10 +33,10 @@ calc 1+1
 ```
 (*If the command is not recognized the setting for an alias may be different on your os or terminal*)
 
-## Sintaxis
+## Usage
 Once your done setting up the command you should know how to use it.
 
-### Characters
+### Operators
 You can make as many operations as long as it only includes:
 * Numbers
 * Additions: `calc 1+1` will result in 2.
@@ -48,11 +48,29 @@ You can make as many operations as long as it only includes:
 * Parenthesis: `calc (1+2)*3` will result in 9.
 * More may be added.
 
-### Important notes
-* In some terminals some characters may be reserved so type the backslash `\` to work.
-* **Blank spaces** are not valid: `calc 1 + 1` will not result give result the expected result.
-
-
 ### Multiple operations
 As said you can make multiple operations and it will evaluate the operation as expected in a calculator for example:\
 `calc 10+20-30*40/50%60+2^4` will result in 22 and `calc (10+20-30)*40/50%60+2^4` will result in 16.
+
+### Simultaneous operations
+This calculator can also be used to make several operations in the same line by separating them with spaces so taking the previous example:\
+`calc 10+20-30*40/50%60+2^4 (10+20-30)*40/50%60+2^4` will result in 22 and 16 for each operation.
+</br><br>
+
+### Important notes
+* In some terminals some characters may be reserved so type the backslash `\` to work.
+* **Blank spaces** can't be used for the same operation: `calc 1 + 1` will not give the expected result.
+
+## Output
+The expected results will be printed in the following style to the terminal:\
+*calc (OPERATIONS)*\
+*(RESULTS)*
+```
+➜  ~ calc 1+1 2-2 3*3 4/4
+1+1 = 2.0
+2-2 = 0.0
+3*3 = 9.0
+4/4 = 1.0
+➜  ~ calc 10+20-30*40/50%60+2^4
+10+20-30*40/50%60+2^4 = 22.0
+```
