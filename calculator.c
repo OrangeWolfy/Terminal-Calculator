@@ -31,17 +31,20 @@ int main(int argc, char* argv[]) {
 
 
 	struct queue *output_queue;
-	output_queue = infix_to_postfix(argv[1]);
-	if(output_queue == NULL) {
-		return 1;
-	}
+	double res;
 
-	double res = evaluate_postfix(&output_queue);
-	if(res == INT_MIN) {
-		printf("NULL\n");
-		return 1;
+	for(int i = 1; i < argc; i++) {
+		output_queue = infix_to_postfix(argv[i]);
+		if(output_queue == NULL) {
+			return 1;
+		}
+
+		res = evaluate_postfix(&output_queue);
+		if(res == INT_MIN) {
+			return 1;
+		}
+		printf("%s = %.1f\n", argv[i], res);
 	}
-	printf("%s = %.1f\n", argv[1], res);
 
     return 0;
 }
@@ -124,7 +127,6 @@ struct queue *infix_to_postfix(char arg[]) {
 		// Check if the argument is a valid operator
 			precedence = operator_precedence(arg[i]);
 			if(precedence == -1) {
-				printf("%d\n", i);
 				printf("Invalid operator \'%c\'\n", arg[i]);
 				goto cleanup;
 			}
@@ -185,14 +187,9 @@ double evaluate_postfix(struct queue **output_queue) {
 		} else {
 		// If current queue is an operator, pop the first two numbers from the solved stack, evaluate below and push the result
 			num2 = pop_double(&solve_stack); 
-			if(num2 == INT_MIN) {
-				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
-				goto cleanup;
-			}
-				
 			num1 = pop_double(&solve_stack);
-			if(num1 == INT_MIN) {
-				printf("Fail to pop, number stack empty in line %d\n", __LINE__);
+			if(num1 == INT_MIN || num2 == INT_MIN) {
+				printf("Invalid operation\n");
 				goto cleanup;
 			}
 
