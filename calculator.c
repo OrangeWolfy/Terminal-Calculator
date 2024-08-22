@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 		if(res == INT_MIN) {
 			return 1;
 		}
-		printf("%s = %.1f\n", argv[i], res);
+		printf("%s = %.3f\n", argv[i], res);
 	}
 
     return 0;
@@ -83,31 +83,28 @@ struct queue *infix_to_postfix(char arg[]) {
 	struct stack_char *operator_stack = NULL;
 	double num = 0;
 	int precedence;
-	char c;
+	char c, *endptr;
 	
-	// Loop until argument is empty or an error occurs
-	for(int i = 0; arg[i] != '\0'; i++) {
-		if((int)arg[i] >= 48 && (int)arg[i] <= 57) {
-		// Grab the whole number in the operation
-			while((int)arg[i] >= 48 && (int)arg[i] <= 57) {
-				num += arg[i] - 48;
-				num *= 10;
-				i++;
-			}
-			num /= 10;
+	// Loop while string is not at the end
+	while(*arg != '\0') {
+		// Get decimal or hexadecimal number and point to the next non number character
+		num = strtod(arg, &arg);
+		if(!(num == 0 && *arg != '0')) {
 			if(enqueue(&output_queue, num, '\0') == -1) {
 				printf("Fail to enque output in line %d\n", __LINE__);
 				goto cleanup;
 			}
-			num = 0;
-			i--;
-		} else if(arg[i] == '(') {
+		}
+		// Check if string is at the end
+		else if(*arg == '\0') { 
+			break;
+		} else if(*arg == '(') {
 		// Push if open parentheses
-			if(push_char(&operator_stack, arg[i]) == -1) {
+			if(push_char(&operator_stack, *arg) == -1) {
 				printf("Fail to push operator in line %d\n", __LINE__);
 				goto cleanup;
 			}
-		} else if(arg[i] == ')') {
+		} else if(*arg == ')') {
 		// Empty operator stack until an open parentheses is found
 			while(operator_stack != NULL) {
 				c = pop_char(&operator_stack);
@@ -125,9 +122,9 @@ struct queue *infix_to_postfix(char arg[]) {
 			}
 		} else {
 		// Check if the argument is a valid operator
-			precedence = operator_precedence(arg[i]);
+			precedence = operator_precedence(*arg);
 			if(precedence == -1) {
-				printf("Invalid operator \'%c\'\n", arg[i]);
+				printf("Invalid operator \'%c\'\n", *arg);
 				goto cleanup;
 			}
 			// Enqueue a 0 if the operation starts with an operator to evaluate postfix notation correctly
@@ -145,11 +142,12 @@ struct queue *infix_to_postfix(char arg[]) {
 					goto cleanup;
 				}
 			}
-			if(push_char(&operator_stack, arg[i]) == -1) {
+			if(push_char(&operator_stack, *arg) == -1) {
 				printf("Fail to push operator in line %d\n", __LINE__);
 				goto cleanup;
 			}
 		}
+		arg++;
 	}
 	// Empty operator stack to the output queue
 	while(operator_stack != NULL) {
@@ -192,7 +190,6 @@ double evaluate_postfix(struct queue **output_queue) {
 				printf("Invalid operation\n");
 				goto cleanup;
 			}
-
 			switch((*output_queue)->op) {
 				case '+':
 					if (push_double(&solve_stack, num1 + num2) == -1) {
@@ -214,12 +211,20 @@ double evaluate_postfix(struct queue **output_queue) {
 					}
 					break;
 				case '/':
+					if(num2 == 0) {
+						printf("Division by 0 undefined\n");
+						goto cleanup;
+					}
 					if (push_double(&solve_stack, num1 / num2) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
 					}
 					break;
 				case '%':
+					if(num2 == 0) {
+						printf("Division by 0 undefined\n");
+						goto cleanup;
+					}
 					if (push_double(&solve_stack, (double)((long long)num1 % (long long)num2)) == -1) {
 						printf("Fail to push number in line %d\n", __LINE__);
 						goto cleanup;
