@@ -38,7 +38,7 @@ Once your done setting up the command you should know how to use it.
 
 ### Operators
 You can make as many operations as long as it only includes:
-* Numbers
+* Decimal or Hexadecimal numbers.
 * Additions: `calc 1+1` will result in 2.
 * Subtraction: `calc 1-1` will result in 0.
 * Multiplication: `calc 2*2` or `calc 2x2` will result in 4.
