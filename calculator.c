@@ -96,9 +96,10 @@ struct queue *infix_to_postfix(char arg[]) {
 			}
 		}
 		// Check if string is at the end
-		else if(*arg == '\0') { 
+		if(*arg == '\0') { 
 			break;
-		} else if(*arg == '(') {
+		}
+		if(*arg == '(') {
 		// Push if open parentheses
 			if(push_char(&operator_stack, *arg) == -1) {
 				printf("Fail to push operator in line %d\n", __LINE__);
