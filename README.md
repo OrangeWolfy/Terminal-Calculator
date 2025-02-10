@@ -58,7 +58,7 @@ This calculator can also be used to make several operations in the same line by 
 </br><br>
 
 ### Important notes
-* In some terminals some characters may be reserved so type the backslash `\` to work.
+* In some terminals some characters may be reserved so you can surround the operation in quotation marks `""` or type a backslash before each reserved character `\` to work.
 * **Blank spaces** can't be used for the same operation: `calc 1 + 1` will not give the expected result.
 
 ## Output
