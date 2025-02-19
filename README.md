@@ -38,7 +38,7 @@ Once your done setting up the command you should know how to use it.
 
 ### Operators
 You can make as many operations as long as it only includes:
-* Decimal or Hexadecimal numbers.
+* Integers, Decimal or Hexadecimal numbers.
 * Additions: `calc 1+1` will result in 2.
 * Subtraction: `calc 1-1` will result in 0.
 * Multiplication: `calc 2*2` or `calc 2x2` will result in 4.
@@ -46,7 +46,6 @@ You can make as many operations as long as it only includes:
 * Modulus: `calc 2%10` will result in 2.
 * Exponentiation: `calc 2^4` will result in 16.
 * Parenthesis: `calc (1+2)*3` will result in 9.
-* More may be added.
 
 ### Multiple operations
 As said you can make multiple operations and it will evaluate the operation as expected in a calculator for example:\
