@@ -1,12 +1,14 @@
+CC=gcc
 CFILE=calculator.c
 BINARY=calc
 DIR=~/.calculator/
+TERMINAL=~/.bashrc
 
-output:
+output: $(CFILE)
 	mkdir -p $(DIR)
-	gcc $(CFILE) -o $(BINARY)
+	$(CC) $(CFILE) -o $(BINARY)
 	mv $(BINARY) $(DIR)
-	grep -l calc=\"$(DIR)$(BINARY)\" ~/.bashrc || echo "alias calc=\"$(DIR)$(BINARY)\"" >> ~/.bashrc
+	grep -l calc=\"$(DIR)$(BINARY)\" $(TERMINAL) || echo "alias calc=\"$(DIR)$(BINARY)\"" >> $(TERMINAL)
 
 clean:
 	rm -rf $(CFILE) $(BINARY) Makefile
